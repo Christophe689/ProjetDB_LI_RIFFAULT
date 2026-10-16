@@ -4,14 +4,6 @@ TI503N, Bases de données 1. Binôme : Christophe LI, Nohlan RIFFAULT
 
 Le projet conçoit, avec la méthode MERISE, la base de données sportive d'un club de la NHL inspiré des Toronto Maple Leafs. Le périmètre couvre l'effectif des joueurs par saison, les postes, les blessures, les fonctions du staff, les rencontres, leurs lieux, les convocations et les catégories de tribune.
 
-## Contenu du dépôt
-
-| Fichier | Contenu |
-|---|---|
-| `README.md` | Documentation du projet |
-| `prompt_ricardo.txt` | Prompt soumis à l'IAG |
-| `[MCD].loo` | Fichier source du MCD (Looping) |
-| `[MCD].png` | Image du MCD |
 
 ## Partie 1 : analyse des besoins
 
