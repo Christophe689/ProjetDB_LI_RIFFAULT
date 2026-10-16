@@ -92,7 +92,7 @@ Permettre à l'étudiant de disposer des informations métier nécessaires pour 
 
 ### Dictionnaire de données obtenu
 
-Les trois premières colonnes reprennent la réponse de l'IA. La dernière indique où chaque donnée se trouve dans le MCD.
+Le dictionnaire ci-dessous recense les 33 données du système d'information.
 
 | Signification de la donnée | Type | Taille indicative | Élément du MCD |
 |---|---|---|---|
@@ -130,10 +130,6 @@ Les trois premières colonnes reprennent la réponse de l'IA. La dernière indiq
 | Catégorie de la tribune | Texte | 60 caractères | CATEGORIE_TRIBUNE.libelle |
 | Capacité de la tribune, si connue | Entier | 6 chiffres | TRIBUNE.capacite |
 
-### Analyse du résultat
-
-L'IA a renvoyé 33 données, dans la fourchette demandée (25 à 35), et ses règles couvrent les huit activités du périmètre.
-
 ## Partie 2 : MCD
 
 ### Entités
@@ -151,7 +147,7 @@ L'IA a renvoyé 33 données, dans la fourchette demandée (25 à 35), et ses rè
 | TRIBUNE (entité faible) | id_lieu + code_tribune | nom, capacite |
 | CATEGORIE_TRIBUNE | id_categorie | libelle |
 
-L'attribut `statut` de RENCONTRE est un ajout de notre part, absent du dictionnaire. Il sert à indiquer l'état de la rencontre (valeurs à définir en partie 2).
+L'attribut `statut` de RENCONTRE est un ajout de notre part, absent du dictionnaire. Il sert à indiquer l'état de la rencontre.
 
 ### Associations
 
