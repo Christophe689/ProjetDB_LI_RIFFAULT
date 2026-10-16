@@ -1,6 +1,6 @@
 # Mini-projet bases de données : Toronto Maple Leafs Hockey Club
 
-TI503N, Bases de données 1. Binôme : Christophe LI, Nolan Riffault
+TI503N, Bases de données 1. Binôme : Christophe LI, Nohlan RIFFAULT
 
 Le projet conçoit, avec la méthode MERISE, la base de données sportive d'un club de la NHL inspiré des Toronto Maple Leafs. Le périmètre couvre l'effectif des joueurs par saison, les postes, les blessures, les fonctions du staff, les rencontres, leurs lieux, les convocations et les catégories de tribune.
 
