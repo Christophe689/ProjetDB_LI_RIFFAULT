@@ -157,3 +157,5 @@ L'attribut `statut` de RENCONTRE est un ajout de notre part, absent du dictionna
 | APPARTENIR | TRIBUNE / CATEGORIE_TRIBUNE | TRIBUNE (1,1) ; CATEGORIE_TRIBUNE (0,n) | |
 
 <img width="1772" height="771" alt="image" src="https://github.com/user-attachments/assets/b79d7381-683d-45bb-80a2-02a4efe342dd" />
+
+MCD du club montrant les entités et associations.
