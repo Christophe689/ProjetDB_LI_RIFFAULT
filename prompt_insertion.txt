@@ -1,0 +1,48 @@
+Prompt utilisé pour générer 3_insertion.sql (framework RICARDO)
+==============================================================
+
+R — Rôle :
+Tu es un assistant spécialisé dans la génération de jeux de données SQL réalistes pour MySQL 8. Tu connais le hockey sur glace professionnel et la Ligue nationale de hockey (NHL), en particulier le Toronto Maple Leafs Hockey Club.
+
+I — Instructions :
+D'abord, lis le script de création des tables et le script des contraintes fournis en référence. Ensuite, génère les requêtes d'insertion table par table, en respectant l'ordre imposé par les clés étrangères :
+saison, poste, joueur, composer_effectif, occuper, blessure, fonction_staff, membre_staff, exercer, lieu, categorie_tribune, tribune, rencontre, convoquer.
+Enfin, vérifie que chaque ligne respecte toutes les contraintes avant de rendre le script.
+
+C — Contexte :
+La base maple_leafs gère l'effectif des joueurs par saison, leurs postes, leurs blessures, les fonctions du staff et sa hiérarchie, les rencontres et leurs lieux, les convocations des joueurs aux rencontres et les tribunes des arénas classées par catégorie. Elle sera interrogée par le staff hockey du club pour préparer les rencontres et suivre l'effectif. Nous sommes en novembre 2026 : la saison 2026-2027 est en cours.
+
+A — Contraintes additionnelles :
+1. Respecte toutes les contraintes d'intégrité (clés primaires, clés étrangères, NOT NULL) et de validation (CHECK) des scripts fournis. Par exemple :
+   - nom et prénom non vides, année de naissance entre 1985 et 2010 ;
+   - numéro de maillot entre 1 et 98 ;
+   - capacité de tribune inconnue (NULL) ou positive ;
+   - date de fin de blessure renseignée si et seulement si le statut est 'retabli' ;
+   - dates de fin (saison, blessure, exercice) qui ne précèdent pas les dates de début.
+   Respecte aussi les règles de gestion : un seul poste principal par joueur, un numéro de maillot différent pour chaque joueur d'une même saison, une rencontre comprise dans les dates de sa saison, un joueur convoqué présent dans l'effectif de la saison de la rencontre, un membre du staff qui ne se supervise pas lui-même.
+2. Utilise les valeurs autorisées sans accent : 'domicile'/'exterieur' ; 'prevue'/'jouee'/'reportee'/'annulee' ; 'en cours'/'en reeducation'/'retabli' ; 'convoque'/'non retenu'/'indisponible'.
+3. Utilise des données réelles quand elles sont publiques (joueurs, numéros de maillot, dates de naissance, membres principaux du staff, arénas et adresses, adversaires). Les blessures, les convocations et les membres secondaires du staff peuvent être inventés, mais doivent rester plausibles. Les descriptions de blessure restent générales (par exemple « blessure au haut du corps »), sans diagnostic médical détaillé.
+4. Indique les identifiants explicitement dans chaque INSERT.
+5. Volumes attendus : 4 saisons (2023-2024 à 2026-2027), 5 postes, environ 20 joueurs, environ 15 joueurs par effectif, environ 10 blessures, environ 10 membres du staff, 10 fonctions, 8 lieux, 5 catégories et environ 12 tribunes, environ 20 rencontres et une convocation par joueur de l'effectif pour chaque rencontre jouée ou proche.
+6. Prévois des cas utiles pour les requêtes d'interrogation :
+   - des joueurs présents sur plusieurs saisons et d'autres sur une seule ; un joueur suivi mais inscrit dans aucun effectif ;
+   - des joueurs avec plusieurs postes ;
+   - des joueurs avec plusieurs blessures, des joueurs jamais blessés, des blessures en cours au moment présent ;
+   - une hiérarchie du staff sur au moins trois niveaux, un membre avec deux fonctions successives, une fonction exercée par personne ;
+   - des rencontres de séries éliminatoires, une rencontre reportée et une annulée, des rencontres à venir de la saison 2026-2027 ;
+   - un lieu qui n'a accueilli aucune rencontre et une catégorie de tribune sans tribune ;
+   - les trois statuts de convocation, avec 'indisponible' pour les joueurs blessés à la date de la rencontre.
+7. Échappe les apostrophes en les doublant ('').
+
+R — Références :
+- Script de création : [contenu de 1_creation.sql]
+- Script de contraintes : [contenu de 2_contraintes.sql]
+- https://www.nhl.com/mapleleafs/roster
+- https://www.nhl.com/mapleleafs/schedule
+- https://www.scotiabankarena.com/
+
+D — Rendement désiré :
+Un unique script SQL nommé 3_insertion.sql, qui commence par USE maple_leafs; et ne contient que des requêtes INSERT INTO ... VALUES (une requête multi-lignes par table), séparées par une ligne vide, sans commentaire. Aucune explication en dehors du script.
+
+O — Objectif :
+Remplir la base avec un volume de données suffisant et réaliste pour tester les contraintes et exécuter les requêtes du scénario d'utilisation (4_interrogation.sql), en obtenant un résultat non vide pour chacune.
