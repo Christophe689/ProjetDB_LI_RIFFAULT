@@ -159,3 +159,39 @@ L'attribut `statut` de RENCONTRE est un ajout de notre part, absent du dictionna
 <img width="1772" height="771" alt="image" src="https://github.com/user-attachments/assets/b79d7381-683d-45bb-80a2-02a4efe342dd" />
 
 MCD du club montrant les entités et associations.
+
+## Partie 3 : MLD et MPD
+
+### MLD
+
+- **joueur** (**id_joueur**, prenom_joueur, nom_joueur, date_naissance)
+- **saison** (**id_saison**, libelle, date_debut, date_fin)
+- **poste** (**id_poste**, code_poste, libelle)
+- **fonction_staff** (**id_fonction**, libelle, description)
+- **membre_staff** (**id_membre**, prenom_membre, nom_membre, #id_superviseur)
+- **lieu** (**id_lieu**, nom, ville, adresse)
+- **categorie_tribune** (**id_categorie**, libelle)
+- **tribune** (**#id_lieu, code_tribune**, nom, capacite, #id_categorie)
+- **rencontre** (**id_rencontre**, date_rencontre, heure_rencontre, equipe_adverse, domicile_exterieur, statut, #id_saison, #id_lieu)
+- **blessure** (**id_blessure**, date_debut, date_fin, description, statut, #id_joueur)
+- **composer_effectif** (**#id_joueur, #id_saison**, numero_maillot)
+- **occuper** (**#id_joueur, #id_poste**, poste_principal)
+- **exercer** (**#id_membre, #id_fonction**, date_debut_exercice, date_fin_exercice)
+- **convoquer** (**#id_joueur, #id_rencontre**, statut, date_convocation)
+
+### MPD
+
+- **`1_creation.sql`** crée les 14 tables. Une ligne encore référencée ne peut pas être supprimée, ce qui protège l'historique du club. Seule `id_superviseur` est en `ON DELETE SET NULL` : si un superviseur part, ses subordonnés restent.
+- **`2_contraintes.sql`** ajoute 18 contraintes issues des règles de gestion et du dictionnaire de données :
+  - `CHECK` sur les dates : RG2, RG8 et RG11 ;
+  - `CHECK` avec `IN` sur les statuts : RG16 ;
+  - `CHECK` avec `BETWEEN` : naissance, numéro de maillot, heure ;
+  - `CHECK` avec `LIKE` : format `AAAA-AAAA` de la saison ;
+  - `CHECK` sur deux colonnes : statut et date de fin d'une blessure, RG7 ;
+  - `UNIQUE` : numéro de maillot dans une saison, RG4 ;
+  - `DEFAULT` : statut de convocation.
+- Les règles RG5, RG12 et RG13 portent sur plusieurs lignes ou plusieurs tables. Elles ne peuvent pas s'écrire en `CHECK` et nécessiteraient des triggers.
+
+## Partie 4 : insertion des données
+
+Les données de `3_insertion.sql` ont été générées par IA avec le prompt RICARDO de `prompt_insertion.txt`. Elles comptent 19 joueurs, 20 rencontres et 247 convocations, entre autres. Les joueurs, le staff principal et les arénas sont réels. Les blessures et les convocations sont inventées.
