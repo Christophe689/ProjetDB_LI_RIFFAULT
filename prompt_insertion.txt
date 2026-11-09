@@ -1,5 +1,4 @@
-Prompt utilisé pour générer 3_insertion.sql (framework RICARDO)
-==============================================================
+Prompt utilisé pour générer 3_insertion.sql (RICARDO)
 
 R — Rôle :
 Tu es un assistant spécialisé dans la génération de jeux de données SQL réalistes pour MySQL 8. Tu connais le hockey sur glace professionnel et la Ligue nationale de hockey (NHL), en particulier le Toronto Maple Leafs Hockey Club.
