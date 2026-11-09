@@ -195,3 +195,67 @@ MCD du club montrant les entités et associations.
 ## Partie 4 : insertion des données
 
 Les données de `3_insertion.sql` ont été générées par IA avec le prompt RICARDO de `prompt_insertion.txt`. Elles comptent 19 joueurs, 20 rencontres et 247 convocations, entre autres. Les joueurs, le staff principal et les arénas sont réels. Les blessures et les convocations sont inventées.
+
+## Partie 5 : interrogation de la base
+
+### Scénario d'utilisation
+
+Le 8 novembre 2026, Sarah Chen, coordinatrice performance, prépare pour l'entraîneur-chef le dossier du match du 10 novembre contre les Panthers de la Floride. Le dossier couvre :
+
+- l'effectif et les blessures ;
+- la feuille de match ;
+- la rotation des joueurs ;
+- le calendrier ;
+- l'organigramme du staff ;
+- les arénas.
+
+Les requêtes sont dans `4_interrogation.sql` :
+
+| Type | Requêtes |
+|---|---|
+| Projections et sélections | P1 à P7 |
+| Agrégation | A1 à A6 |
+| Jointures | J1 à J6 |
+| Imbriquées | N1 à N7 |
+
+### Étude des plans d'exécution
+
+Requête étudiée (Q) : les joueurs convoqués pour la rencontre du 10 novembre 2026.
+
+π<sub>nom, prénom</sub> ( σ<sub>date = '2026-11-10' ∧ statut = 'convoque'</sub> ( JOUEUR ⋈ CONVOQUER ⋈ RENCONTRE ) )
+
+Tailles des tables : |JOUEUR| = 19, |CONVOQUER| = 247, |RENCONTRE| = 20.
+
+Calcul du coût :
+
+- une sélection ou une projection sur n lignes coûte n instructions ;
+- une jointure entre n et m lignes coûte n × m instructions.
+
+Chaque nœud indique le nombre de lignes produites et, entre crochets, le coût de l'opération.
+
+**Plan naïf : jointures puis sélection (9 892 instructions)**
+
+```mermaid
+graph TD
+    P["π nom, prénom<br/>12 lignes [12]"] --> S["σ date ∧ statut<br/>12 lignes [247]"]
+    S --> J2["⋈ id_rencontre<br/>247 lignes [247 × 20 = 4 940]"]
+    J2 --> J1["⋈ id_joueur<br/>247 lignes [19 × 247 = 4 693]"]
+    J2 --> R["RENCONTRE<br/>20"]
+    J1 --> JO["JOUEUR<br/>19"]
+    J1 --> C["CONVOQUER<br/>247"]
+```
+
+**Plan optimisé : sélection la plus sélective d'abord (522 instructions)**
+
+```mermaid
+graph TD
+    P["π nom, prénom<br/>12 lignes [12]"] --> J2["⋈ id_joueur<br/>12 lignes [19 × 12 = 228]"]
+    J2 --> JO["JOUEUR<br/>19"]
+    J2 --> SC["σ statut = 'convoque'<br/>12 lignes [15]"]
+    SC --> J1["⋈ id_rencontre<br/>15 lignes [1 × 247 = 247]"]
+    J1 --> SR["σ date = '2026-11-10'<br/>1 ligne [20]"]
+    J1 --> C["CONVOQUER<br/>247"]
+    SR --> R["RENCONTRE<br/>20"]
+```
+
+**Conclusion** : le plan optimisé demande environ 19 fois moins d'instructions. Il fait les sélections avant les jointures, en commençant par la plus sélective : la date ne garde qu'une rencontre sur 20. Les jointures portent ainsi sur très peu de lignes. Si on appliquait aussi le filtre sur le statut directement sur CONVOQUER, on obtiendrait 731 instructions : ce filtre est peu sélectif (224 lignes sur 247), il vaut donc mieux l'appliquer après la jointure.
